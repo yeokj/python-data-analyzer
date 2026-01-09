@@ -1,12 +1,15 @@
+from datetime import datetime
+
+# Define analyze_numbers(numbers)
 def analyze_numbers(numbers):
-    if len(numbers) == 0:
+    if not numbers:
         return None
     
     count = len(numbers)
     low_value = min(numbers)
     high_value = max(numbers)
     total = sum(numbers)
-    average = total / count
+    average = round(total / count, 2)
     
     analysis = {
         "count": count,
@@ -16,21 +19,45 @@ def analyze_numbers(numbers):
         "average": average
     }
 
+    # Return count, min, max, sum, average in a dictionary
     return analysis
 
-def main():
+def collect_and_analyze():
+    # Ask the user how many numbers to enter
+    # Loop to collect inputs
+    # Validate each input is a number
+    # Store numbers in a list
+    # Print the list
     entries = []
-    n = int(input("Enter how many entries would you like to make? "))
 
+    # Validate number of entries (n)
+    while True:
+        s = input("Enter how many entries would you like to make: ").strip()
+        try:
+            n = int(s)
+            if n <= 0:
+                print("Please enter an integer greater than 0.")
+                continue
+            break
+        except ValueError:
+            print("Please enter a valid integer.")
+
+    # Collect exactly n integer entries, re-prompt on invalid input
     for _ in range(n):
-        num = int(input("Enter a number: "))
-        entries.append(num)
+        while True:
+            s = input("Enter an integer: ").strip()
+            try:
+                num = int(s)
+                entries.append(num)
+                break
+            except ValueError:
+                print("Not an integer — try again.")
 
     print()
     print(entries)
 
     print("\nStatistics")
-    
+
     report = analyze_numbers(entries)
     if report:
         print("count:", report.get("count"))
@@ -38,23 +65,41 @@ def main():
         print("Maximum:", report.get("maximum"))
         print("Sum:", report.get("sum"))
         print("Average:", report.get("average"))
+        return report
+    else:
+        print("No numbers to analyze.")
+        return None
 
-# def tba():
-#     print("Python program running...")
+def main():
+    # Show menu options
+    # 1) Enter numbers and analyze
+    # 2) Exit the program
+    # Ask user for menu choice
+    # If choice is 1:
+    # collect numbers
+    # analyze numbers
+    # print formatted report
+    # If choice is 2:
+    # break out of the loop
+    while True:
+        print("\nMenu:")
+        print("1) Collect and analyze numbers")
+        print("2) Exit the program")
 
-#     print("\nMenu:")
-#     print("1) Collect and analyze numbers")
-#     print("2) Exit the program")
+        try:
+            user_choice = int(input("Enter your choice: "))
+        except ValueError:
+            print("Invalid option, try again.")
+            continue
 
-#     user_choice = int(input("Enter your choice: "))
-
-#     match user_choice:
-#         case 1:
-#             collect_numbers()
-#         case 2:
-#             print("Exiting program... Goodbye")
-#         case _:
-#             print("Invalid option, try again.")
+        if user_choice == 1:
+            collect_and_analyze()
+            break
+        elif user_choice == 2:
+            print("Exiting program... Goodbye")
+            break
+        else:
+            print("Invalid option, try again.")
 
 if __name__ == "__main__":
     main()
