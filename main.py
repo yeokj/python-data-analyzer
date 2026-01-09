@@ -60,11 +60,28 @@ def collect_and_analyze():
 
     report = analyze_numbers(entries)
     if report:
-        print("count:", report.get("count"))
+        print("Count:", report.get("count"))
         print("Minimum:", report.get("minimum"))
         print("Maximum:", report.get("maximum"))
         print("Sum:", report.get("sum"))
         print("Average:", report.get("average"))
+        # Save the analysis report to a file named report.txt
+        timestamp = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+        try:
+            with open("report.txt", "w") as f:
+                f.write(f"Analysis Report - {timestamp}\n")
+                f.write("Numbers Entered:\n")
+                for entry in entries:
+                    f.write(f"{entry}\n")
+                f.write("\nStatistics\n")
+                f.write(f"Count: {report.get('count')}\n")
+                f.write(f"Minimum: {report.get('minimum')}\n")
+                f.write(f"Maximum: {report.get('maximum')}\n")
+                f.write(f"Sum: {report.get('sum')}\n")
+                f.write(f"Average: {report.get('average')}\n")
+            print("\nAnalysis report saved to report.txt")
+        except OSError as e:
+            print(f"Failed to write report.txt: {e}")
         return report
     else:
         print("No numbers to analyze.")
