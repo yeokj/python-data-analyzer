@@ -1,4 +1,5 @@
 from datetime import datetime
+from storage import save_number
 
 # Define analyze_numbers(numbers)
 def analyze_numbers(numbers):
@@ -82,7 +83,7 @@ def collect_and_analyze():
             print("\nAnalysis report saved to report.txt")
         except OSError as e:
             print(f"Failed to write report.txt: {e}")
-        return report
+        return entries
     else:
         print("No numbers to analyze.")
         return None
@@ -98,10 +99,12 @@ def main():
     # print formatted report
     # If choice is 2:
     # break out of the loop
+    numbers = []
     while True:
         print("\nMenu:")
         print("1) Collect and analyze numbers")
-        print("2) Exit the program")
+        print("2) Save numbers to JSON file")
+        print("3) Exit the program")
 
         try:
             user_choice = int(input("Enter your choice: "))
@@ -110,9 +113,21 @@ def main():
             continue
 
         if user_choice == 1:
-            collect_and_analyze()
-            break
+            # call the collector to get a list of numbers
+            numbers = collect_and_analyze()
+            # continue to menu so the user can choose to save or exit
         elif user_choice == 2:
+            # Prevent saving when there are no collected numbers or when numbers
+            # is in an unexpected state.
+            if not numbers:
+                print("No numbers available. Please collect numbers first (option 1).")
+                continue
+            try:
+                save_number(numbers)
+                print("Numbers saved to data.json")
+            except (TypeError, OSError) as e:
+                print(f"Failed to save numbers: {e}")
+        elif user_choice == 3:
             print("Exiting program... Goodbye")
             break
         else:
