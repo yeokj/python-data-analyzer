@@ -1,35 +1,14 @@
 from datetime import datetime
-from storage import save_number, load_numbers
+from storage import save_number, load_numbers, save_report
+from analyzer import analyze_numbers, print_report
 
-# Define analyze_numbers(numbers)
-def analyze_numbers(numbers):
-    if not numbers:
-        return None
-    
-    count = len(numbers)
-    low_value = min(numbers)
-    high_value = max(numbers)
-    total = sum(numbers)
-    average = round(total / count, 2)
-    
-    analysis = {
-        "count": count,
-        "minimum": low_value,
-        "maximum": high_value,
-        "sum": total,
-        "average": average
-    }
-
-    # Return count, min, max, sum, average in a dictionary
-    return analysis
-
-def collect_and_analyze():
+def collect_numbers():
     # Ask the user how many numbers to enter
     # Loop to collect inputs
     # Validate each input is a number
     # Store numbers in a list
     # Print the list
-    entries = []
+    numbers = []
 
     # Validate number of entries (n)
     while True:
@@ -49,63 +28,28 @@ def collect_and_analyze():
             s = input("Enter an integer: ").strip()
             try:
                 num = int(s)
-                entries.append(num)
+                numbers.append(num)
                 break
             except ValueError:
                 print("Not an integer — try again.")
 
     print()
-    print(entries)
+    print(numbers)
 
-    print("\nStatistics")
-
-    report = analyze_numbers(entries)
-    if report:
-        print("Count:", report.get("count"))
-        print("Minimum:", report.get("minimum"))
-        print("Maximum:", report.get("maximum"))
-        print("Sum:", report.get("sum"))
-        print("Average:", report.get("average"))
-        # Save the analysis report to a file named report.txt
-        timestamp = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
-        try:
-            with open("report.txt", "w") as f:
-                f.write(f"Analysis Report - {timestamp}\n")
-                f.write("Numbers Entered:\n")
-                for entry in entries:
-                    f.write(f"{entry}\n")
-                f.write("\nStatistics\n")
-                f.write(f"Count: {report.get('count')}\n")
-                f.write(f"Minimum: {report.get('minimum')}\n")
-                f.write(f"Maximum: {report.get('maximum')}\n")
-                f.write(f"Sum: {report.get('sum')}\n")
-                f.write(f"Average: {report.get('average')}\n")
-            print("\nAnalysis report saved to report.txt")
-        except OSError as e:
-            print(f"Failed to write report.txt: {e}")
-        return entries
-    else:
-        print("No numbers to analyze.")
-        return None
+    return numbers
+   
 
 def main():
-    # Show menu options
-    # 1) Enter numbers and analyze
-    # 2) Exit the program
-    # Ask user for menu choice
-    # If choice is 1:
-    # collect numbers
-    # analyze numbers
-    # print formatted report
-    # If choice is 2:
-    # break out of the loop
     numbers = []
+    last_results = None
     while True:
         print("\nMenu:")
-        print("1) Collect and analyze numbers")
+        print("1) Collect numbers")
         print("2) Save numbers to JSON file")
         print("3) Load numbers from JSON file")
-        print("4) Exit the program")
+        print("4) Analyze numbers")
+        print("5) Save analysis to report.txt file")
+        print("6) Exit the program")
 
         try:
             user_choice = int(input("Enter your choice: "))
@@ -115,7 +59,7 @@ def main():
 
         if user_choice == 1:
             # call the collector to get a list of numbers
-            numbers = collect_and_analyze()
+            numbers = collect_numbers()
             # continue to menu so the user can choose to save or exit
         elif user_choice == 2:
             # Prevent saving when there are no collected numbers or when numbers
@@ -141,6 +85,33 @@ def main():
                 # catch ValueError from invalid content and other I/O issues
                 print(f"Failed to load numbers: {e}")
         elif user_choice == 4:
+            # Analyze numbers and print a report
+            if not numbers:
+                print("No numbers available. Please collect or load numbers first.")
+                continue
+            try:
+                results = analyze_numbers(numbers)
+                if results is None:
+                    print("No numbers to analyze.")
+                    continue
+                last_results = results
+                print_report(numbers, results)
+            except Exception as e:
+                print(f"Failed to analyze numbers: {e}")
+        elif user_choice == 5:
+            # Save the last analysis to report.txt
+            if not numbers:
+                print("No numbers available to save. Collect or load numbers first.")
+                continue
+            if not last_results:
+                print("No analysis available. Run option 4 to analyze numbers first.")
+                continue
+            try:
+                save_report(numbers, last_results, filename="report.txt")
+                print("Analysis report saved to report.txt")
+            except Exception as e:
+                print(f"Failed to save analysis report: {e}")
+        elif user_choice == 6:
             print("Exiting program... Goodbye")
             break
         else:
