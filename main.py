@@ -1,5 +1,5 @@
 from datetime import datetime
-from storage import save_number
+from storage import save_number, load_numbers
 
 # Define analyze_numbers(numbers)
 def analyze_numbers(numbers):
@@ -104,7 +104,8 @@ def main():
         print("\nMenu:")
         print("1) Collect and analyze numbers")
         print("2) Save numbers to JSON file")
-        print("3) Exit the program")
+        print("3) Load numbers from JSON file")
+        print("4) Exit the program")
 
         try:
             user_choice = int(input("Enter your choice: "))
@@ -128,6 +129,18 @@ def main():
             except (TypeError, OSError) as e:
                 print(f"Failed to save numbers: {e}")
         elif user_choice == 3:
+            # Load numbers from disk regardless of current in-memory state
+            try:
+                loaded = load_numbers()
+                if not loaded:
+                    print("No numbers found in data.json")
+                    continue
+                numbers = loaded
+                print("Numbers loaded from data.json")
+            except Exception as e:
+                # catch ValueError from invalid content and other I/O issues
+                print(f"Failed to load numbers: {e}")
+        elif user_choice == 4:
             print("Exiting program... Goodbye")
             break
         else:
