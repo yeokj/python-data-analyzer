@@ -26,7 +26,7 @@ def collect_numbers():
         while True:
             s = input("Enter an integer: ").strip()
             try:
-                num = int(s)
+                num = float(s)
                 numbers.append(num)
                 break
             except ValueError:

@@ -1,4 +1,7 @@
-from flask import Flask, render_template
+from flask import Flask, render_template, request
+import re
+
+from analyzer import analyze_numbers
 
 app = Flask(__name__)
 
@@ -8,6 +11,27 @@ def index():
     your_name = "Kyame Israel"
     return render_template('index.html', name=your_name)
 
+@app.route('/analyze', methods=['GET', 'POST'])
+def analyze():
+    # Only handle POST form submissions here; GET shows the index page
+    if request.method == 'POST':
+        request_data = request.form.get('numbers', '')
+        # split on commas, whitespace, or newlines and remove empty tokens
+        tokens = [t for t in re.split(r'[,\s]+', request_data.strip()) if t]
+        if not tokens:
+            return render_template('index.html', error='Please enter one or more numbers.')
+
+        try:
+            numbers = [float(t) for t in tokens]
+        except ValueError:
+            return render_template('index.html', error='Invalid input — please enter only numbers (e.g. 1, 2.5, 3).')
+
+        results = analyze_numbers(numbers)
+        # render the dedicated results template; match the variable names used by the template
+        return render_template('results.html', numbers_list=numbers, analysis=results)
+
+    # GET -> show the form
+    return render_template('index.html')
 
 if __name__ == "__main__":
     app.run(debug=True)
