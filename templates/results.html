@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Analysis Results</title>
+    <link rel="stylesheet" href="../static/css/style.css">
+  </head>
+  <body>
+    <main>
+      <header>
+        <h1>Analysis Results</h1>
+      </header>
+
+      <!-- Error message area -->
+      <div id="error" role="alert" aria-live="assertive">
+        {% if error %}
+          <p>{{ error }}</p>
+        {% endif %}
+      </div>
+
+      <!-- Numbers entered -->
+      {% if numbers_list %}
+      <section aria-labelledby="numbers-heading">
+        <h2 id="numbers-heading">Numbers Entered</h2>
+        <ol>
+          {% for n in numbers_list %}
+            <li>{{ n }}</li>
+          {% endfor %}
+        </ol>
+      </section>
+      {% else %}
+      <p>No numbers were provided.</p>
+      {% endif %}
+
+      <!-- Analysis summary -->
+      {% if analysis %}
+      <section aria-labelledby="stats-heading">
+        <h2 id="stats-heading">Statistics</h2>
+        <dl>
+          <dt>Count</dt>
+          <dd>{{ analysis.count if analysis.count is defined else analysis['count'] }}</dd>
+
+          <dt>Minimum</dt>
+          <dd>{{ analysis.minimum if analysis.minimum is defined else analysis['minimum'] }}</dd>
+
+          <dt>Maximum</dt>
+          <dd>{{ analysis.maximum if analysis.maximum is defined else analysis['maximum'] }}</dd>
+
+          <dt>Sum</dt>
+          <dd>{{ analysis.sum if analysis.sum is defined else analysis['sum'] }}</dd>
+
+          <dt>Average</dt>
+          <dd>{{ analysis.average if analysis.average is defined else analysis['average'] }}</dd>
+        </dl>
+      </section>
+      {% endif %}
+
+      <!-- Saved report information -->
+      {% if saved_filename %}
+      <section aria-labelledby="report-heading">
+        <h2 id="report-heading">Saved Report</h2>
+        <p>Report saved to <strong>{{ saved_filename }}</strong>.</p>
+        {% if saved_url %}
+          <p><a href="{{ saved_url }}">Download report</a></p>
+        {% endif %}
+      </section>
+      {% endif %}
+
+      <footer>
+        <p><a href="/">Back to input</a></p>
+      </footer>
+    </main>
+  </body>
+</html>

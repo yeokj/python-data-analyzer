@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="en">
+		<head>
+			<meta charset="utf-8">
+			<meta name="viewport" content="width=device-width, initial-scale=1">
+			<title>Number Analyzer</title>
+			<link rel="stylesheet" href="../static/css/style.css">
+		</head>
+	<body>
+		<main>
+			<header>
+				<h1>Number Analyzer</h1>
+				<p>Enter a list of numbers (commas, spaces or new lines are accepted). Submit to analyze.</p>
+			</header>
+
+			<!-- Form: posts numbers to the server for analysis -->
+			<form method="post" action="/analyze">
+				<label for="numbers">Numbers</label>
+				<textarea id="numbers" name="numbers" rows="6" placeholder="e.g. 1, 2, 3.5\n4 5 6"> </textarea>
+
+				<div>
+					<button type="submit">Analyze</button>
+					<!-- reset clears the form fields without JS -->
+					<button type="reset">Clear</button>
+				</div>
+			</form>
+
+					<!-- Error area (server-rendered). role=alert + aria-live help accessibility.
+							 If using a template engine, render an `error` variable here when present. -->
+					<div id="error" role="alert" aria-live="assertive">
+						{% if error %}
+							<p>{{ error }}</p>
+						{% endif %}
+					</div>
+
+					<!-- Results are intentionally not displayed on this page. The server
+							 can redirect to a results page or provide downloads instead. -->
+
+		</main>
+	</body>
+</html>
