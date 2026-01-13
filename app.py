@@ -1,5 +1,6 @@
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, jsonify
 import re
+from external_api import fetch_hourly_temperature
 
 from analyzer import analyze_numbers
 
@@ -32,6 +33,13 @@ def analyze():
 
     # GET -> show the form
     return render_template('index.html')
+
+@app.route('/test-weather')
+def test_weather():
+    latitude = 40.7128
+    longitude = -74.0060
+    times, temperatures = fetch_hourly_temperature(latitude, longitude)
+    return jsonify(times, temperatures)
 
 if __name__ == "__main__":
     app.run(debug=True)
