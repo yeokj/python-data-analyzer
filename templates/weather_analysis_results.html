@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Weather Analysis Results</title>
+    <!-- optional stylesheet (projects using the site theme can keep this) -->
+    <link rel="stylesheet" href="../static/css/style.css">
+  </head>
+  <body>
+    <main>
+      <header>
+        <h1>Weather Analysis</h1>
+      </header>
+
+      {% if times and temperatures and (times|length == temperatures|length) %}
+      <section aria-labelledby="table-heading">
+        <h2 id="table-heading">Forecast</h2>
+        <p>{{ times|length }} data points</p>
+        <table>
+          <thead>
+            <tr>
+              <th scope="col">Time</th>
+              <th scope="col">Temperature</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for t in times %}
+            <tr>
+              <td>{{ t }}</td>
+              <td>{{ temperatures[loop.index0] }}</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </section>
+      {% else %}
+      <section>
+        <p>No weather data available.</p>
+      </section>
+      {% endif %}
+
+      <footer>
+        <p><a href="/">Back</a></p>
+      </footer>
+    </main>
+  </body>
+</html>

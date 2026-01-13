@@ -14,10 +14,9 @@ def fetch_hourly_temperature(latitude, longitude, timezone="auto"):
     res = requests.get(open_meteo_url, params=params)
     res.raise_for_status()
     data = res.json()
-    print(data.get('hourly', {}))
-    
+
     hourly = data.get('hourly', {})
     times = hourly.get('time', [])
-    temperature = hourly.get('temperature_2m', [])
+    temperatures = hourly.get('temperature_2m', [])
 
-    return times, temperature
+    return times, temperatures
