@@ -40,7 +40,7 @@ def test_weather():
     longitude = -74.0060
     times, temperatures = fetch_hourly_temperature(latitude, longitude)
     results = analyze_temperatures(times, temperatures)
-    return jsonify(results)
+    return render_template('weather_analysis_results.html', results=results)
 
 if __name__ == "__main__":
     app.run(debug=True)

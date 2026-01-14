@@ -34,9 +34,32 @@
           </tbody>
         </table>
       </section>
-      {% else %}
-      <section>
-        <p>No weather data available.</p>
+      {% endif %}
+
+      {# Statistics block: render analysis if provided by the view (stats/results/analysis) #}
+      {% set s = stats if stats is defined else (results if results is defined else (analysis if analysis is defined else None)) %}
+      {% if s %}
+      <section aria-labelledby="stats-heading">
+        <h2 id="stats-heading">Summary Statistics</h2>
+        <dl>
+          <dt>Minimum</dt>
+          <dd>{{ (s.minimum if s.minimum is defined else s['minimum'])|round(2) }}&deg;</dd>
+
+          <dt>Maximum</dt>
+          <dd>{{ (s.maximum if s.maximum is defined else s['maximum'])|round(2) }}&deg;</dd>
+
+          <dt>Sum</dt>
+          <dd>{{ s.sum if s.sum is defined else s['sum'] }}</dd>
+
+          <dt>Mean</dt>
+          <dd>{{ (s.mean if s.mean is defined else s['mean'])|round(2) }}&deg;</dd>
+
+          <dt>Median</dt>
+          <dd>{{ (s.median if s.median is defined else s['median'])|round(2) }}&deg;</dd>
+
+          <dt>Std Dev</dt>
+          <dd>{{ (s.stddev if s.stddev is defined else s['stddev'])|round(2) }}&deg;</dd>
+        </dl>
       </section>
       {% endif %}
 
