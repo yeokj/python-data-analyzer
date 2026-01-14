@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<title>Weather Input</title>
+		<link rel="stylesheet" href="../static/css/style.css">
+	</head>
+
+	<body>
+		<main class="container">
+			<h1>Weather Input</h1>
+
+			<form method="POST" action="/analyze-weather" aria-label="Weather input form">
+				<div class="form-row">
+					<label for="lat">Latitude</label>
+					<input id="lat" name="lat" type="text" placeholder="e.g. 40.7128" required>
+				</div>
+
+				<div class="form-row">
+					<label for="lon">Longitude</label>
+					<input id="lon" name="lon" type="text" placeholder="e.g. -74.0060" required>
+				</div>
+
+				<div class="form-actions">
+					<button type="submit">Analyze Weather</button>
+				</div>
+			</form>
+
+			{% if error %}
+				<div class="message error" role="alert">{{ error }}</div>
+			{% endif %}
+
+		</main>
+	</body>
+</html>

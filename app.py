@@ -34,13 +34,30 @@ def analyze():
     # GET -> show the form
     return render_template('index.html')
 
-@app.route('/analyze-weather')
-def test_weather():
-    latitude = 40.7128
-    longitude = -74.0060
-    times, temperatures = fetch_hourly_temperature(latitude, longitude)
-    results = analyze_temperatures(times, temperatures)
-    return render_template('weather_analysis_results.html', results=results)
+@app.route('/analyze-weather', methods=['GET', 'POST'])
+def analyze_weather():
+    # Simple handler: use provided lat/lon (POST) or defaults (GET).
+    if request.method == 'POST':
+        try:
+            latitude = float(request.form.get('lat'))
+            longitude = float(request.form.get('lon'))
+        except (TypeError, ValueError):
+            return render_template('weather_input.html', error='Please enter valid numeric latitude and longitude.')
+    else:
+        latitude = 40.7128
+        longitude = -74.0060
+
+    try:
+        times, temperatures = fetch_hourly_temperature(latitude, longitude)
+        stats = analyze_temperatures(times, temperatures)
+        return render_template('weather_analysis_results.html', times=times, temperatures=temperatures, stats=stats)
+    except Exception:
+        # Keep it simple: show a generic error in the template on failure
+        return render_template('weather_analysis_results.html', error='Failed to fetch or analyze weather data.')
+
+@app.route('/weather-input')
+def weather_input():
+    return render_template('weather_input.html')
 
 if __name__ == "__main__":
     app.run(debug=True)

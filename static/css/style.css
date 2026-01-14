@@ -32,9 +32,10 @@ body {
 }
 
 main {
-  max-width: 860px;
-  margin: 40px auto;
-  padding: 20px;
+  max-width: 760px;
+  margin: 32px auto;
+  padding: 18px;
+  box-sizing: border-box;
 }
 
 header h1 {
@@ -51,9 +52,9 @@ header p {
 form {
   background: var(--card);
   border: 1px solid var(--border);
-  border-radius: 10px;
+  border-radius: 14px;
   padding: 18px;
-  box-shadow: 0 2px 6px rgba(36, 28, 54, 0.04);
+  box-shadow: 0 6px 20px rgba(36, 28, 54, 0.06);
 }
 
 label {
@@ -67,13 +68,49 @@ textarea {
   width: 100%;
   min-height: 120px;
   resize: vertical;
-  padding: 10px 12px;
-  border-radius: 8px;
+  padding: 12px 14px;
+  border-radius: 12px;
   border: 1px solid var(--border);
   background: #fff;
   font-size: 0.95rem;
   color: var(--text);
+  transition: box-shadow 150ms ease, transform 80ms ease;
 }
+
+/* Smooth, rounded inputs (text, number, email, etc.) */
+input[type="text"],
+input[type="number"],
+input[type="email"],
+input[type="search"],
+input[type="tel"],
+input[type="url"] {
+  display: block;
+  width: 100%;
+  padding: 10px 12px;
+  border-radius: 12px; /* rounded */
+  border: 1px solid var(--border);
+  background: #fff;
+  font-size: 0.95rem;
+  color: var(--text);
+  box-sizing: border-box;
+  transition: box-shadow 150ms ease, transform 80ms ease;
+}
+
+/* Slight lift and focus ring on focus for nicer UX */
+input[type="text"]:focus,
+input[type="number"]:focus,
+input[type="email"]:focus,
+input[type="search"]:focus,
+input[type="tel"]:focus,
+input[type="url"]:focus {
+  outline: none;
+  box-shadow: 0 6px 18px rgba(123,100,195,0.08), 0 0 0 4px var(--focus);
+  transform: translateY(-1px);
+}
+
+/* Make labels and input rows look compact */
+.form-row { margin-bottom: 12px; }
+.form-row label { display: block; margin-bottom: 6px; }
 
 .controls {
   margin-top: 12px;
@@ -85,8 +122,9 @@ button {
   cursor: pointer;
   border: none;
   padding: 10px 14px;
-  border-radius: 8px;
+  border-radius: 12px;
   font-weight: 600;
+  transition: transform 90ms ease, box-shadow 120ms ease, opacity 120ms ease;
 }
 
 button[type="submit"] {
@@ -121,7 +159,7 @@ section {
   background: var(--card);
   border: 1px solid var(--border);
   padding: 16px;
-  border-radius: 8px;
+  border-radius: 12px;
 }
 
 section h2 {
@@ -157,8 +195,24 @@ a {
 
 /* Responsive tweaks */
 @media (max-width: 520px) {
-  main { margin: 20px; padding: 12px; }
+  main { margin: 16px; padding: 12px; }
   header h1 { font-size: 1.4rem; }
   button { width: 100%; }
   .controls { flex-direction: column; }
+}
+
+/* Button hover/active subtle effects */
+button[type="submit"]:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 8px 24px rgba(36,28,54,0.08);
+}
+button:active {
+  transform: translateY(0);
+  opacity: 0.95;
+}
+
+/* Placeholder color for inputs */
+input::placeholder, textarea::placeholder {
+  color: var(--muted);
+  opacity: 0.8;
 }
